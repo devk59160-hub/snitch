@@ -1,5 +1,5 @@
-import mongoose from "mongoose"
 import bcrypt from "bcrypt"
+import mongoose from "mongoose"
 
 
 
@@ -31,7 +31,7 @@ const usershema=new mongoose.Schema({
         default:"buyer"
     },
     googleId:{
-        type:string
+        type:String
     }
 })
 
@@ -43,9 +43,9 @@ usershema.pre("save",async function () {
     this.password=hash
 })
 
-usershema.method.comparePassword = async function (password) {
+usershema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password,this.password);
 }
 
-const userdata = mongoose.model("userdata",userschema)
+const userdata = mongoose.model("userdata",usershema)
 export default userdata

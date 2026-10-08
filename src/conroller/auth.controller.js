@@ -76,9 +76,7 @@ export async function login (req,res){
     }
 
 
-    git config --global user.name "devk59160-hub"
-
-    git config --global user.email "devk59160@gmail.com"
+   
     const isPasswordMatch = await user.comparePassword(password)
     if(!isPasswordMatch){
         res.status(404).json({
