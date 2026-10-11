@@ -1,12 +1,10 @@
 import express from "express";
 import { login, register} from "../conroller/auth.controller.js"
-import {protect , sellerprotective} from "../midleware/auth.middleware.js"
-import {createProduct,getAllProducts,getProductById,} from "../conroller/product.controller.js"
-
+import {validationRegister,validationLoginUser} from "../validator/auth.validator.js"
 const router = express.Router();
 
-router.post("/register", register);
-router.post("/login",login)
+router.post("/register", validationRegister,register);
+router.post("/login",validationLoginUser,login)
 
 
 export default router;
