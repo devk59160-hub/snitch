@@ -19,7 +19,7 @@ async function sendTokenResponse(user,res,message){
         user:{
             id:user._id,
             email:user.email,
-            contect:user.contect,
+            contact:user.contact,
             fullname:user.fullname,
             role:user.role
         }
@@ -28,34 +28,35 @@ async function sendTokenResponse(user,res,message){
 
 
 export async function register(req,res){
-    const {email,contect,password,fullname,isSeller} = req.body
+    const {email,contact,password,fullname,isSeller} = req.body
+    // const userContact = contact || contect //
 
     try{
         const isUserExit = await usermodel.findOne({
             $or:[
                 {email},
-                {contect}
+                {contact}
             ]
         })
 
         if(isUserExit){
             return res.status(400).json({
-                message:"user with the email or contect already exit ",
+                message:"User with this email or contact already exists",
                 success:false
             })
         }
 
         const user = await usermodel.create({
             email,
-            contect,
+            contact,
             password,
             fullname,
-            role:isSeller?"seller":"buyer"
+            role:isSeller ? "seller" : "buyer"
         })
-        await sendTokenResponse(user,res,"user register successfully")
+        await sendTokenResponse(user,res,"User registered successfully")
     }
     catch(error){
-          console.log(error)
+        console.log(error)
         return res.status(500).json({ message: "Server error" });
     }
 }
@@ -70,19 +71,34 @@ export async function login (req,res){
     })
 
     if(!user){
-        res.status(404).json({
-            message:"Invalid email or password"
+        return res.status(404).json({
+            message:"Invalid email or password",
+            success:false
         })
     }
 
-
-   
     const isPasswordMatch = await user.comparePassword(password)
     if(!isPasswordMatch){
-        res.status(404).json({
-            message:"Invalid Password please try again"
+        return res.status(401).json({
+            message:"Invalid Password please try again",
+            success:false
         })
     }
-    await sendTokenResponse(user,res,"user login successfully")
+    await sendTokenResponse(user,res,"User login successfully")
 }
 
+export async function getme(req, res) {
+    if (!req.user) {
+        return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+    return res.status(200).json({
+        success: true,
+        user: {
+            id: req.user._id,
+            email: req.user.email,
+            contect: req.user.contect,
+            fullname: req.user.fullname,
+            role: req.user.role
+        }
+    });
+}

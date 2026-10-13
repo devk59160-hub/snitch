@@ -15,7 +15,7 @@ const upload = multer({
 
 const router = express.Router();
 
-router.post("/", sellerprotective, upload.array("images",8),productValidator,createProduct,)
+router.post("/create", sellerprotective, upload.array("images",8),productValidator,createProduct,)
 
 router.get("/seller",protect,getAllProducts)
 

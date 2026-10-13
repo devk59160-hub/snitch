@@ -9,7 +9,7 @@ const usershema=new mongoose.Schema({
         required:true,
         unique:true
     },
-    contect:{
+    contact:{
         type:String,
         required:false,
 

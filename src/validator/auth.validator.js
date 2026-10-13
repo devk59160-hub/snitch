@@ -12,19 +12,21 @@ next();
 
 export const validationRegister=[
     body("email")
-    .isEmail().withMessage("invalide email formate"),
+        .isEmail().withMessage("Invalid email format"),
     body("contact")
-    .isEmpty().withMessage("contact is required")
-     .matches(/^\d{10}$/)
-    .withMessage("contact must be a 10 digit number"),
+        .notEmpty().withMessage("Contact number is required")
+        .matches(/^\d{10}$/)
+        .withMessage("Contact must be a 10 digit number"),
     body("password")
-    .isEmpty().withMessage("Password must be at least 6 characters long"),
-        body("fullname")
+        .notEmpty().withMessage("Password is required")
+        .isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
+    body("fullname")
         .notEmpty().withMessage("Full name is required")
         .isLength({ min: 3 }).withMessage("Full name must be at least 3 characters long"),
     body("isSeller")
+        .optional()
         .isBoolean().withMessage("isSeller must be a boolean value"),
-        validationRequest
+    validationRequest
 ]
 
 
